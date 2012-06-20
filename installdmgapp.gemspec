@@ -14,4 +14,7 @@ Gem::Specification.new do |gem|
   gem.name          = "installdmgapp"
   gem.require_paths = ["lib"]
   gem.version       = Installdmgapp::VERSION
+
+  # gem.add_runtime_dependency("thor", ["~> 0.15.1"])
+  gem.add_runtime_dependency("ps")
 end

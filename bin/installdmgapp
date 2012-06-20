@@ -1,0 +1,66 @@
+#!/usr/bin/env ruby
+require 'rubygems'
+require 'installdmgapp'
+require 'optparse'
+require 'ostruct'
+
+include Installdmgapp
+
+class OptparseExample
+  #
+  # Return a structure describing the options.
+  #
+  def self.parse(args)
+    # The options specified on the command line will be collected in *options*.
+    # We set default values here.
+    options = Hash.new
+    options[:verbose] = false
+    options[:target] = '/Applications'
+
+    opts = OptionParser.new do |opts|
+      opts.banner = "Usage: installdmgapp [options] myapp_0.2.3.dmg"
+
+      opts.separator ""
+      opts.separator "Specific options:"
+
+      opts.on("-t","--target [Applications dir]", 'Where to deposit .app files','  Defaults to /Applications') do |target|
+        options[:target] = target
+      end
+
+      # Boolean switch.
+      # opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
+      #   options[:verbose] = v
+      # end
+
+      opts.separator ""
+      opts.separator "Common options:"
+
+      # No argument, shows at tail.  This will print an options summary.
+      # Try it and see!
+      opts.on_tail("-h", "--help", "Show this message") do
+        puts opts
+        exit
+      end
+
+      # Another typical switch to print the version.
+      opts.on_tail("--version", "Show version") do
+        puts Installdmgapp::VERSION
+        exit
+      end
+    end
+
+    opts.parse!(args)
+    options
+  end  # parse()
+
+end  # class OptparseExample
+
+options = OptparseExample.parse(ARGV)
+
+path = ARGV.pop
+
+abort('You must pass a dmg file as the argument') unless path && path =~ /\.dmg$/i
+abort("#{path} doesn't exist") unless File.exist?(path)
+
+dmg = Dmg.new(path, options)
+dmg.install
