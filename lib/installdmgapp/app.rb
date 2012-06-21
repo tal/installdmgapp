@@ -3,7 +3,7 @@ module Installdmgapp
     attr_reader :path, :target_path
     def initialize(path,target_dir)
       @path = File.expand_path(path)
-      @target_path = File.expand_path(File.join(target_path,name))
+      @target_path = File.expand_path(File.join(target_dir,name))
     end
 
     def process
@@ -15,7 +15,7 @@ module Installdmgapp
     end
 
     def kill
-      puts "  #{app_name} is running with pid #{proc.pid}"
+      puts "  #{name} is running with pid #{process.pid}"
       print "    Would you like to kill that process and continue overwriting? (Y/N) "
 
       if get_y
@@ -46,6 +46,7 @@ module Installdmgapp
       delete if exist?
       `cp -R #{path} #{target_path}` unless exist? || running?
     end
+    alias install copy
 
   private
 

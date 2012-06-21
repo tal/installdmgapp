@@ -1,3 +1,4 @@
+require 'ps'
 require "installdmgapp/version"
 require "installdmgapp/dmg"
 require "installdmgapp/app"

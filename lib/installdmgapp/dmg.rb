@@ -50,11 +50,21 @@ module Installdmgapp
       @apps ||= app_files.collect {|a| App.new(a,target)}
     end
 
+    def prefpanes_files
+      Dir[File.join(volume,'/*.prefPane')]
+    end
+
+    def prefpanes
+      @prefpanes ||= prefpanes_files.collect {|p| PrefPane.new(p)}
+    end
+
     def install
-      apps.each do |app|
+      (apps+prefpanes).each do |app|
         puts "Installing #{app.name}"
-        app.copy
+        app.install
       end
+
+      unmount
     end
 
   private
